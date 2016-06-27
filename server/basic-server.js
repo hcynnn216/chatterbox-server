@@ -1,3 +1,6 @@
+var handleRequest = require('./request-handler');
+//var _ = require('../node_modules/underscore/underscore');
+console.dir(handleRequest);
 /* Import node's http module: */
 var http = require('http');
 
@@ -14,7 +17,9 @@ var port = 3000;
 // special address that always refers to localhost.
 var ip = '127.0.0.1';
 
-
+// function handleRequest(request, response) {
+//   response.end('it works!' + request.url);
+// }
 
 // We use node's http module to create a server.
 //
@@ -22,8 +27,9 @@ var ip = '127.0.0.1';
 // incoming requests.
 //
 // After creating the server, we will tell it to listen on the given port and IP. */
-var server = http.createServer(handleRequest);
+var server = http.createServer(handleRequest.requestHandler);
 console.log('Listening on http://' + ip + ':' + port);
+console.log(handleRequest);
 server.listen(port, ip);
 
 // To start this server, run:
