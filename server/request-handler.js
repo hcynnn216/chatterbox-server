@@ -20,7 +20,7 @@ var obj = {
   updatedAt: '2016-06-28T03:45:08.996Z'
 };
 
-
+var msgCounter = 0;
 var msgStorage = [];
 msgStorage.push(obj);
 var address = '/?order=-createdAt';
@@ -57,7 +57,17 @@ var requestHandler = function(request, response) {
       // var jsonObj = JSON.parse(body);
       request.on('end', function() {
         jsonObj = JSON.parse(body);
-        msgStorage.push(jsonObj);
+        var d = new Date();
+        var msgObj = {
+          createdAt: d,
+          objectId: msgCounter++,
+          roomname: jsonObj.roomname,
+          username: jsonObj.username,
+          text: jsonObj.text,
+          updatedAt: d
+        };
+        
+        msgStorage.push(msgObj);
       });
 
 

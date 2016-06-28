@@ -60,10 +60,10 @@ var app = {
       contentType: 'application/json',
       data: { order: '-createdAt'},
       success: function(data) {
-        console.log('line 63 this is the date we get from GET: ' + data);
+        // console.log('line 63 this is the date we get from GET: ' + data);
         // Don't bother if we have nothing to work with
         data = JSON.parse(data);
-        console.log(data.results.length);
+        // console.log(data.results.length);
         if (!data.results || !data.results.length) { return; }
 
         // Get the last message
