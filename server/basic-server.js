@@ -1,6 +1,5 @@
 var handleRequest = require('./request-handler');
 //var _ = require('../node_modules/underscore/underscore');
-console.dir(handleRequest);
 /* Import node's http module: */
 var http = require('http');
 

@@ -11,7 +11,7 @@ this file and include it in basic-server.js so that it actually works.
 *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
 
 **************************************************************/
-
+var msgStorage = [];
 var requestHandler = function(request, response) {
   // Request and Response come from node's http module.
   //
@@ -27,10 +27,40 @@ var requestHandler = function(request, response) {
   // Adding more logging to your server can be an easy way to get passive
   // debugging help, but you should always be careful about leaving stray
   // console.logs in your code.
-  console.log('Serving request type ' + request.method + ' for url ' + request.url);
-
-  // The outgoing status.
   var statusCode = 200;
+  
+  var body = '';
+  var jsonObj;
+  // The outgoing status.
+  if (request.method === 'POST') {
+    statusCode = 201;
+    request.on('data', function(chunk) {
+      body += chunk;
+    });
+    // var jsonObj = JSON.parse(body);
+    request.on('end', function() {
+      jsonObj = JSON.parse(body);
+
+      msgStorage.push(jsonObj);
+      console.log(msgStorage);
+    });
+
+
+    
+    // console.log(msgStorage);
+
+    console.log('Serving request type ' + request.method + ' for url ' + request.url);
+
+
+    // stringified = 'received data';
+  } else if (request.method === 'GET') {
+    statusCode = 200;
+    var returnMsg = {};
+    console.log('this is line 59: ' + msgStorage);
+    returnMsg.results = msgStorage;
+    stringified = JSON.stringify(returnMsg);
+    // console.log(stringified);
+  }
 
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
@@ -52,10 +82,13 @@ var requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  var json = {results: [1, 2, 3]};
-  var stringified = JSON.stringify(json);
-  // response.write(stringified);
-  response.end(stringified);
+  if (stringified) {
+    console.log(stringified);
+    response.end(stringified);
+  }
+  else {
+    response.end('msg');
+  }
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
