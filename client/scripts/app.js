@@ -3,7 +3,7 @@ var app = {
 
   //TODO: The current 'toggleFriend' function just toggles the class 'friend'
   //to all messages sent by the user
-  server: 'http://127.0.0.1:3000/',
+  server: 'http://127.0.0.1:3000',
   username: 'anonymous',
   roomname: 'lobby',
   lastMessageId: 0,
@@ -60,7 +60,10 @@ var app = {
       contentType: 'application/json',
       data: { order: '-createdAt'},
       success: function(data) {
+        console.log('line 63 this is the date we get from GET: ' + data);
         // Don't bother if we have nothing to work with
+        data = JSON.parse(data);
+        console.log(data.results.length);
         if (!data.results || !data.results.length) { return; }
 
         // Get the last message

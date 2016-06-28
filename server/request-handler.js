@@ -11,9 +11,21 @@ this file and include it in basic-server.js so that it actually works.
 *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
 
 **************************************************************/
+var obj = {
+  createdAt: '2016-06-28T03:45:08.996Z',
+  objectId: '1',
+  roomname: 'lobby',
+  username: 'anonymous',
+  text: 'some text message',
+  updatedAt: '2016-06-28T03:45:08.996Z'
+};
+
+
 var msgStorage = [];
-var address = '/classes/messages';
-var statusCode;
+msgStorage.push(obj);
+var address = '/?order=-createdAt';
+var statusCode = 200;
+var stringified;
 var requestHandler = function(request, response) {
   // Request and Response come from node's http module.
   //
@@ -33,7 +45,8 @@ var requestHandler = function(request, response) {
   var body = '';
   var jsonObj;
   // The outgoing status.
-  if (address !== request.url) {
+  if (false) {
+    console.log(request.url);
     statusCode = 404;
   } else {
     if (request.method === 'POST') {
@@ -103,7 +116,7 @@ var requestHandler = function(request, response) {
 var defaultCorsHeaders = {
   'access-control-allow-origin': '*',
   'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'access-control-allow-headers': 'content-type, accept',
+  'access-control-allow-headers': 'content-type, accept', 
   'access-control-max-age': 10 // Seconds.
 };
 
