@@ -12,6 +12,8 @@ this file and include it in basic-server.js so that it actually works.
 
 **************************************************************/
 var msgStorage = [];
+var address = '/classes/messages';
+var statusCode;
 var requestHandler = function(request, response) {
   // Request and Response come from node's http module.
   //
@@ -27,39 +29,38 @@ var requestHandler = function(request, response) {
   // Adding more logging to your server can be an easy way to get passive
   // debugging help, but you should always be careful about leaving stray
   // console.logs in your code.
-  var statusCode = 200;
   
   var body = '';
   var jsonObj;
   // The outgoing status.
-  if (request.method === 'POST') {
-    statusCode = 201;
-    request.on('data', function(chunk) {
-      body += chunk;
-    });
-    // var jsonObj = JSON.parse(body);
-    request.on('end', function() {
-      jsonObj = JSON.parse(body);
-
-      msgStorage.push(jsonObj);
-      console.log(msgStorage);
-    });
-
-
-    
-    // console.log(msgStorage);
-
-    console.log('Serving request type ' + request.method + ' for url ' + request.url);
+  if (address !== request.url) {
+    statusCode = 404;
+  } else {
+    if (request.method === 'POST') {
+      statusCode = 201;
+      request.on('data', function(chunk) {
+        body += chunk;
+      });
+      // var jsonObj = JSON.parse(body);
+      request.on('end', function() {
+        jsonObj = JSON.parse(body);
+        msgStorage.push(jsonObj);
+      });
 
 
-    // stringified = 'received data';
-  } else if (request.method === 'GET') {
-    statusCode = 200;
-    var returnMsg = {};
-    console.log('this is line 59: ' + msgStorage);
-    returnMsg.results = msgStorage;
-    stringified = JSON.stringify(returnMsg);
-    // console.log(stringified);
+      
+      // console.log(msgStorage);
+
+      console.log('Serving request type ' + request.method + ' for url ' + request.url);
+
+
+      // stringified = 'received data';
+    } else if (request.method === 'GET') {
+      statusCode = 200;
+      var returnMsg = {};
+      returnMsg.results = msgStorage;
+      stringified = JSON.stringify(returnMsg);
+    }
   }
 
   // See the note below about CORS headers.
@@ -85,9 +86,8 @@ var requestHandler = function(request, response) {
   if (stringified) {
     console.log(stringified);
     response.end(stringified);
-  }
-  else {
-    response.end('msg');
+  } else {
+    response.end('No message was posted yet.');
   }
 };
 
