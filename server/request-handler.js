@@ -52,7 +52,10 @@ var requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  response.end('Hello, World!');
+  var json = {results: [1, 2, 3]};
+  var stringified = JSON.stringify(json);
+  // response.write(stringified);
+  response.end(stringified);
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
